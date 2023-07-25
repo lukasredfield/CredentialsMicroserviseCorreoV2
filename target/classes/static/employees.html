@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Correo Argentino</title>
+
+    <link href="static/images/Correo_Argentino_Logo.png">
+
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<div id="wrapper">
+
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <form class="user">
+            <a href="home.html" class="btn btn-primary btn-user btn-block"><h5>Inicio al inicio</h5></a>
+        </form>
+
+    </ul>
+
+    <div class="container-fluid">
+        <br>
+
+        <h1 class="h3 mb-2 text-gray-800">Gestión de empleados</h1>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Listado</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>DNI</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id="employeeRow">
+                            <td id="dniCell"></td>
+                            <td id="nameCell"></td>
+                            <td id="lastNameCell"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<script src="js/sb-admin-2.min.js"></script>
+
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<script src="js/usuarios.js"></script>
+
+<div class="container-fluid">
+    <br>
+    <pre id="employeeJson"></pre>
+</div>
+
+<script>
+        // Obtiene el DNI del empleado desde la URL
+        const dni = new URLSearchParams(window.location.search).get('dni');
+
+        // Función para obtener y mostrar el JSON del empleado
+        function getEmployeeByDni(dni) {
+            fetch('/employees/' + dni)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('No se pudo obtener los datos del empleado.');
+                    }
+                })
+                .then(employee => {
+                    console.log('Datos del empleado:', JSON.stringify(employee));
+
+                    // Obtiene las referencias de los elementos HTML para mostrar los datos del empleado
+                    const dniCell = document.getElementById('dniCell');
+                    const nameCell = document.getElementById('nameCell');
+                    const lastNameCell = document.getElementById('lastNameCell');
+
+                    // Asigna los valores del empleado a los elementos HTML correspondientes
+                    dniCell.innerHTML = employee.dni;
+                    nameCell.innerHTML = employee.name;
+                    lastNameCell.innerHTML = employee.lastName;
+                    })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Manejar el error en caso de que ocurra
+                });
+        }
+
+           const empleado = new URLSearchParams(window.location.search).get('dni');
+           getEmployeeByDni(empleado);
+
+    </script>
+
+
+</body>
+
+</html>

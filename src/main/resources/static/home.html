@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Autenticación de empleados</title>
+
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-gradient-primary">
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-lg-6 col-md-9 col-sm-12">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-lg-12 mx-auto text-center">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Correo Argentino</h1>
+                                </div>
+                                <form class="user" onsubmit="event.preventDefault(); getEmployee();">
+                                    <div class="form-group">
+                                        <input type="text" inputmode="numeric" class="form-control form-control-user" id="txtDNI" aria-describedby="emailHelp" placeholder="Ingresa DNI" oninput="justNumbers(event)">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block">Acceder</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<script src="js/sb-admin-2.min.js"></script>
+
+<script>
+    function justNumbers(event) {
+        const input = event.target;
+        input.value = input.value.replace(/\D/g, ''); // Filtra caracteres no numéricos
+    }
+
+    function getEmployee() {
+    var dni = document.getElementById("txtDNI").value; // Obtiene el valor del campo de entrada "DNI"
+
+    // Realizar una solicitud AJAX para verificar si el empleado existe
+    fetch('/employees/' + dni)
+        .then(response => {
+            if (response.status === 200) {
+                // Si el empleado existe, redireccionar al enpoint "found" con el parámetro dni
+                window.location.href = "/employees/found?dni=" + dni;
+            } else if (response.status === 404) {
+                // Si el empleado no existe, redireccionar al enpoint "not_found" con el parámetro dni
+                window.location.href = "/employees/not_found?dni=" + dni;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Manejar el error en caso de que ocurra
+        });
+}
+
+</script>
+
+
+</body>
+
+
+
+</html>
